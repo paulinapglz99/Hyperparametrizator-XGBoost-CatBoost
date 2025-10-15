@@ -30,7 +30,7 @@ from catboost import CatBoostRegressor
 file_path = '~/DreamAD/dataset_a9.csv'
 data = pd.read_csv(file_path)
 
-# ---------- 2. Concordance Correlation Coefficient (CCC) ----------
+#Concordance Correlation Coefficient (CCC)
 def ccc_metric(y_true, y_pred):
     """Concordance Correlation Coefficient"""
     y_true = np.asarray(y_true)
@@ -43,34 +43,7 @@ def ccc_metric(y_true, y_pred):
     ccc = (2 * cov) / (var_true + var_pred + (mean_true - mean_pred)**2)
     return ccc
 
-# ---------- 3. Target columns ----------
-target_cols = [
-    'Thal', 'Braak', 'CERAD', 'ADNC',
-    #
-]
-
-drop_cols = ['percent 6e10 positive area',
-               'percent AT8 positive area',
-               'percent NeuN positive area',
-               'percent GFAP positive area',
-               'percent aSyn positive area',
-               'percent pTDP43 positive area'
-               ]
-
-# ---------- 4. Inspect data ----------
-print("Information about the target columns:\n")
-for col in target_cols:
-    dtype = data[col].dtype
-    non_null_count = data[col].count()
-    print(f"Column: '{col}'")
-    print(f"Data type: {dtype}")
-    print(f"# of non-nulls: {non_null_count}\n")
-
-# ---------- 5. Define features ----------
-columns_to_drop = target_cols + drop_cols + ['Donor ID']
-X_features = data.drop(columns=columns_to_drop, errors='ignore')
-
-# ---------- 3. Target columns ----------
+#Target columns
 target_cols = [
     #'Thal', 'Braak', 'CERAD', 'ADNC'#,
     'percent 6e10 positive area',
@@ -81,7 +54,7 @@ target_cols = [
     'percent pTDP43 positive area'
 ]
 
-# ---------- 4. Inspect data ----------
+#Inspect data
 print("Information about the target columns:\n")
 for col in target_cols:
     dtype = data[col].dtype
@@ -90,11 +63,12 @@ for col in target_cols:
     print(f"Data type: {dtype}")
     print(f"# of non-nulls: {non_null_count}\n")
 
-# ---------- 5. Define features ----------
+#Define features
+
 columns_to_drop = target_cols + ['Donor ID']
 X_features = data.drop(columns=columns_to_drop, errors='ignore')
 
-# ---------- 6. Define hyperparameter search space ----------
+#Define hyperparameter search space
 space = {
     'iterations': hp.choice('iterations', [200, 400, 600]),
     'learning_rate': hp.uniform('learning_rate', 0.01, 0.1),
