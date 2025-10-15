@@ -78,7 +78,7 @@ space = {
     'rsm': hp.uniform('rsm', 0.7, 0.9)
 }
 
-# ---------- 7. Loop through target variables ----------
+#Loop through target variables
 results = []
 
 for target_name in target_cols:
@@ -98,7 +98,7 @@ for target_name in target_cols:
         X_cleaned, y_cleaned, test_size=0.2, random_state=42
     )
 
-    # Define objective function for CCC
+    #Define objective function for CCC
     def objective(params):
         params_fixed = {
             'iterations': int(params['iterations']),
@@ -142,7 +142,7 @@ for target_name in target_cols:
         'rsm': best['rsm']
     }
 
-    # Retrain with best params
+    #Retrain with best params
     best_model = CatBoostRegressor(
         loss_function='RMSE',
         random_seed=42,
@@ -170,7 +170,7 @@ print("Hyperparameterisation results saved in object 'hyper_df'")
 
 hyper_df
 
-# ---------- 8. Final save ----------
+#Final save
 #os.path.join("/content/drive/My Drive/dreamAD", "hiperparametros_continuos_optimizados_CatBoost_concordance_mtg.csv")
 hyper_df.to_csv("~/DreamAD/hyperparams_final/CatBoost_hiperparametros_continuos_optimizados_concordance_a9.csv", index=False)
 print("\nHyperparameter optimization completed and results saved.")
