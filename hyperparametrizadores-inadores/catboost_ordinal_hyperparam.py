@@ -32,13 +32,13 @@ from catboost import CatBoostRegressor
 file_path = '~/DreamAD/dataset_a9.csv'
 data = pd.read_csv(file_path)
 
-# ---------- 1. QWK function ----------
+#QWK function
 def qwk_metric(y_true, y_pred):
     y_pred_rounded = np.round(y_pred).astype(int)
     y_true_int = np.round(y_true).astype(int)
     return cohen_kappa_score(y_true_int, y_pred_rounded, weights='quadratic')
 
-# ---------- 3. Target columns ----------
+#Target columns
 target_cols = [
     'Thal', 'Braak', 'CERAD', 'ADNC', 'LEWY', 'LATE'    #
 ]
@@ -50,7 +50,7 @@ drop_cols = ['percent 6e10 positive area',
              'percent aSyn positive area',
              'percent pTDP43 positive area']
 
-# ---------- 4. Inspect data ----------
+#Inspect data
 print("Information about the target columns:\n")
 for col in target_cols:
     dtype = data[col].dtype
@@ -59,11 +59,11 @@ for col in target_cols:
     print(f"Data type: {dtype}")
     print(f"# of non-nulls: {non_null_count}\n")
 
-# ---------- 5. Define features ----------
+#Define features
 columns_to_drop = target_cols + drop_cols + ['Donor ID']
 X_features = data.drop(columns=columns_to_drop, errors='ignore')
 
-# ---------- 6. Define hyperparameter search space ----------
+#Define hyperparameter search space
 space = {
     'iterations': hp.choice('iterations', [200, 400, 600]),
     'learning_rate': hp.uniform('learning_rate', 0.01, 0.1),
@@ -73,7 +73,7 @@ space = {
     'rsm': hp.uniform('rsm', 0.7, 0.9)
 }
 
-# ---------- 7. Loop through target variables ----------
+#Loop through target variables
 results = []
 
 for target_name in target_cols:
@@ -93,7 +93,6 @@ for target_name in target_cols:
         X_cleaned, y_cleaned, test_size=0.2, random_state=42
     )
 
-    # Define objective function DENTRO del loop 👇
     def objective(params):
         params_fixed = {
             'iterations': int(params['iterations']),
@@ -117,7 +116,7 @@ for target_name in target_cols:
         qwk = qwk_metric(y_test, y_pred)
         return {'loss': -qwk, 'status': STATUS_OK}
 
-    # 👇 Todo esto también debe estar dentro del for
+    #
     trials = Trials()
 
     best = fmin(
@@ -161,9 +160,9 @@ for target_name in target_cols:
 hyper_df = pd.DataFrame(results)
 print("Hyperparameterisation results saved in object 'hyper_df'")
 
-hyper_df
+#hyper_df
 
-# ---------- 8. Final save ----------
+#Final save
 hyper_df.to_csv("~/DreamAD/hyperparams_final/CatBoost-hiperparametros_ordinales_optimizados_a9.csv", index=False)
 
 print("\nHyperparameter optimization completed and results saved.")
