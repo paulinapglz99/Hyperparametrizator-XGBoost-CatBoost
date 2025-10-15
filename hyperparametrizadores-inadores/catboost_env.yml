@@ -1,0 +1,4 @@
+name: catboost
+channels:
+  - defaults
+prefix: /home/paulinapg/bioconda/envs/catboost
