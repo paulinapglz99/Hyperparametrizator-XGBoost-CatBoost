@@ -54,6 +54,8 @@ target_cols = [
     'percent pTDP43 positive area'
 ]
 
+drop_cols = ['Thal', 'Braak', 'CERAD', 'ADNC', 'LEWY', 'LATE']
+
 #Inspect data
 print("Information about the target columns:\n")
 for col in target_cols:
@@ -65,7 +67,7 @@ for col in target_cols:
 
 #Define features
 
-columns_to_drop = target_cols + ['Donor ID']
+columns_to_drop = target_cols + drop_cols + ['Donor ID']
 X_features = data.drop(columns=columns_to_drop, errors='ignore')
 
 #Define hyperparameter search space
